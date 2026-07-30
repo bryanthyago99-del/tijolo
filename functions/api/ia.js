@@ -9,4 +9,3 @@ export async function onRequestPost(context) {
   const data = await res.json();
   return new Response(JSON.stringify({resposta: data.choices[0].message.content}), { headers: { 'Content-Type': 'application/json' } });
 }
-}
