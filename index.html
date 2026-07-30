@@ -197,70 +197,35 @@
 </footer>
 
 <script>
-const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w'; // Só o ID público
+const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w';
 
-function mostrarAba(id, btn) {
-  document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('ativa');
-  btn.classList.add('active');
+function mostrarAba(id, btn) {... }
 
-  if(id === 'comunidade') carregarComentarios();
-  if(id === 'videos') carregarVideos();
-}
-
-// YOUTUBE - PEGA DO BACKEND
 async function carregarVideos() {
-  try {
-    const res = await fetch('/api/videos');
-    const data = await res.json();
-    const grid = document.getElementById('grid-videos');
-    grid.innerHTML = data.items.map(video => `
-      <a href="https://youtube.com/watch?v=${video.id.videoId}" target="_blank" class="card-video">
-        <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
-        <h3>${video.snippet.title}</h3>
-      </a>
-    `).join('');
-  } catch {
-    document.getElementById('grid-videos').innerHTML = 'Erro ao carregar vídeos';
-  }
+  const res = await fetch('/api/youtube'); // PUXA DO BACKEND
+  const data = await res.json();
+  document.getElementById('grid-videos').innerHTML = data.items.map(video => `
+    <a href="https://youtube.com/watch?v=${video.id.videoId}" target="_blank" class="card-video">
+      <img src="${video.snippet.thumbnails.medium.url}">
+      <h3>${video.snippet.title}</h3>
+    </a>
+  `).join('');
 }
 
-// COMENTARIOS
 async function carregarComentarios() {
   const res = await fetch('/api/comentarios');
   const dados = await res.json();
-  const div = document.getElementById('lista-comentarios');
-  if(dados.length === 0) { div.innerHTML = '<p>Nenhum comentário ainda. Seja o primeiro! 🧱</p>'; return; }
-  div.innerHTML = dados.map(c =>
-    `<div class="comentario"><b>${c.nome}</b> <small>${new Date(c.data).toLocaleString('pt-BR')}</small><p>${c.texto}</p></div>`
-  ).join('');
+  //... resto
 }
 
 async function enviarComentario() {
-  const nome = document.getElementById('nome').value;
-  const texto = document.getElementById('texto').value;
-  if(!nome ||!texto) return alert('Preencha nome e comentário!');
-  await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto})});
-  document.getElementById('texto').value = '';
-  carregarComentarios();
+  await fetch('/api/comentar', {method: 'POST',...})
+  //... resto
 }
 
-// GROQ IA - TAMBÉM PELO BACKEND
 async function perguntarIA() {
-  const pergunta = document.getElementById('pergunta').value;
-  if(!pergunta) return;
-  document.getElementById('resposta-groq').innerHTML = 'Pensando... 🧱';
-  const res = await fetch('/api/ia', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({pergunta})
-  });
-  const data = await res.json();
-  document.getElementById('resposta-groq').innerHTML = data.resposta;
+  const res = await fetch('/api/ia', {method: 'POST',...})
+  //... resto
 }
-
 carregarVideos();
 </script>
-</body>
-</html>
