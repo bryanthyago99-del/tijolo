@@ -1,8 +1,6 @@
 export async function onRequestPost(context) {
-  const { request, env } = context;
-  const { shader_id, nome, comentario } = await request.json();
-  await env.DB.prepare(
-    "INSERT INTO comentarios (shader_id, nome, comentario) VALUES (?, ?, ?)"
-  ).bind(shader_id, nome, comentario).run();
-  return Response.json({success: true});
+  const db = context.env.DB;
+  const { nome, texto } = await context.request.json();
+  await db.prepare("INSERT INTO comentarios (nome, texto) VALUES (?,?)").bind(nome, texto).run();
+  return new Response(JSON.stringify({ok: true}), { headers: { 'Content-Type': 'application/json' } });
 }
