@@ -13,37 +13,39 @@
     --cinza-claro: #2A2A2A;
     --branco: #F5F5F5;
   }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   body { background: var(--preto); color: var(--branco); }
   
   header {
     background: linear-gradient(135deg, var(--tijolo) 0%, var(--tijolo-escuro) 100%);
-    padding: 20px;
+    padding: 25px 20px;
     text-align: center;
     border-bottom: 4px solid var(--tijolo-escuro);
   }
-  header h1 { font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-  header p { opacity: 0.9; margin-top: 5px; }
+  header h1 { font-size: 2.8rem; text-shadow: 3px 3px 6px rgba(0,0,0,0.6); }
+  header p { opacity: 0.9; margin-top: 8px; font-size: 1.1rem; }
   
   nav {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     background: var(--cinza);
     padding: 15px;
     flex-wrap: wrap;
     position: sticky;
     top: 0;
     z-index: 10;
+    border-bottom: 2px solid var(--cinza-claro);
   }
   nav button {
     background: var(--cinza-claro);
     color: var(--branco);
     border: 2px solid transparent;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 1rem;
     transition: 0.3s;
   }
   nav button:hover, nav button.active {
@@ -52,74 +54,92 @@
     transform: translateY(-2px);
   }
   
-  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
   .aba { display: none; }
-  .aba.ativa { display: block; animation: fadeIn 0.3s; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .aba.ativa { display: block; animation: fadeIn 0.4s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  h2 { margin-bottom: 20px; color: var(--tijolo); }
   
   .grid-videos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
   }
   .card-video {
     background: var(--cinza);
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     transition: 0.3s;
     border: 2px solid var(--cinza-claro);
+    text-decoration: none;
+    color: var(--branco);
+    display: block;
   }
-  .card-video:hover { transform: scale(1.03); border-color: var(--tijolo); }
-  .card-video img { width: 100%; height: 180px; object-fit: cover; }
-  .card-video h3 { padding: 15px; font-size: 1rem; }
+  .card-video:hover { transform: scale(1.04); border-color: var(--tijolo); box-shadow: 0 0 15px rgba(193, 68, 14, 0.3); }
+  .card-video img { width: 100%; height: 190px; object-fit: cover; }
+  .card-video h3 { padding: 16px; font-size: 1.05rem; line-height: 1.4; }
   
-  /* COMUNIDADE */
-  #lista-comentarios { margin-top: 20px; }
   .comentario {
     background: var(--cinza);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border-left: 4px solid var(--tijolo);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border-left: 5px solid var(--tijolo);
   }
-  .comentario b { color: var(--tijolo); }
-  .comentario small { opacity: 0.6; margin-left: 10px; }
-  .form-comentario {
+  .comentario b { color: var(--tijolo); font-size: 1.1rem; }
+  .comentario small { opacity: 0.6; margin-left: 10px; font-size: 0.85rem; }
+  .comentario p { margin-top: 8px; }
+  
+  .form-comentario, .form-ia {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 25px;
     flex-wrap: wrap;
   }
-  .form-comentario input {
+  .form-comentario input, .form-ia input {
     flex: 1;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 10px;
     border: 2px solid var(--cinza-claro);
     background: var(--cinza);
     color: var(--branco);
-    min-width: 150px;
+    font-size: 1rem;
+    min-width: 200px;
   }
-  .form-comentario button {
-    padding: 12px 25px;
+  .form-comentario button, .form-ia button {
+    padding: 14px 28px;
     background: var(--tijolo);
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     color: white;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
+    transition: 0.3s;
   }
-  .form-comentario button:hover { background: var(--tijolo-escuro); }
-  
+  .form-comentario button:hover, .form-ia button:hover { background: var(--tijolo-escuro); }
+
+  #resposta-groq {
+    background: var(--cinza-claro);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    border-left: 5px solid var(--tijolo);
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
   footer {
     text-align: center;
-    padding: 30px;
+    padding: 35px 20px;
     background: var(--cinza);
-    margin-top: 40px;
-    border-top: 2px solid var(--tijolo);
+    margin-top: 50px;
+    border-top: 3px solid var(--tijolo);
   }
   
   @media (max-width: 768px) {
-    header h1 { font-size: 1.8rem; }
+    header h1 { font-size: 2rem; }
     .grid-videos { grid-template-columns: 1fr; }
   }
 </style>
@@ -132,30 +152,37 @@
 </header>
 
 <nav>
-  <button class="active" onclick="mostrarAba('videos')">Vídeos</button>
-  <button onclick="mostrarAba('comunidade')">Comunidade</button>
-  <button onclick="mostrarAba('sobre')">Sobre</button>
+  <button class="active" onclick="mostrarAba('videos', this)">Vídeos</button>
+  <button onclick="mostrarAba('comunidade', this)">Comunidade</button>
+  <button onclick="mostrarAba('ia', this)">Pergunte pra IA 🧱</button>
+  <button onclick="mostrarAba('sobre', this)">Sobre</button>
 </nav>
 
 <div class="container">
-  <!-- ABA VÍDEOS -->
   <div id="videos" class="aba ativa">
-    <h2>Últimos Vídeos</h2>
-    <div id="grid-videos" class="grid-videos">Carregando...</div>
+    <h2>Últimos Vídeos do Canal</h2>
+    <div id="grid-videos">Carregando vídeos...</div>
   </div>
 
-  <!-- ABA COMUNIDADE -->
   <div id="comunidade" class="aba">
-    <h2>Deixe seu comentário 🧱</h2>
+    <h2>Comunidade Tijolo 🧱</h2>
     <div class="form-comentario">
       <input type="text" id="nome" placeholder="Seu nome">
-      <input type="text" id="texto" placeholder="Escreva algo...">
+      <input type="text" id="texto" placeholder="Deixe seu comentário...">
       <button onclick="enviarComentario()">Enviar</button>
     </div>
     <div id="lista-comentarios">Carregando comentários...</div>
   </div>
 
-  <!-- ABA SOBRE -->
+  <div id="ia" class="aba">
+    <h2>Pergunte pra IA do Tijolo</h2>
+    <div class="form-ia">
+      <input type="text" id="pergunta" placeholder="Ex: Como fazer casa de tijolo no minecraft?">
+      <button onclick="perguntarIA()">Perguntar</button>
+    </div>
+    <div id="resposta-groq">Fala comigo que eu respondo na zoeira 😎</div>
+  </div>
+
   <div id="sobre" class="aba">
     <h2>Sobre o Canal</h2>
     <p>Fala galera! Aqui é o Tijolo Craft. Vídeos de Minecraft todo dia: Hardcore, Sobrevivência, Mods, Shaders e muito mais. 
@@ -170,58 +197,70 @@
 </footer>
 
 <script>
-  // TROCAR DE ABA
-  function mostrarAba(id) {
-    document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('ativa');
-    event.target.classList.add('active');
-    
-    if(id === 'comunidade') carregarComentarios();
-  }
+const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w'; // Só o ID público
 
-  // CARREGAR VÍDEOS DO YOUTUBE
-  async function carregarVideos() {
-    // aqui você coloca sua lógica da API do YouTube
-    document.getElementById('grid-videos').innerHTML = 'Conecte sua YT_API_KEY';
-  }
+function mostrarAba(id, btn) {
+  document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('ativa');
+  btn.classList.add('active');
 
-  // COMENTÁRIOS - LISTAR
-  async function carregarComentarios() {
-    const res = await fetch('/api/comentarios');
-    const dados = await res.json();
-    const div = document.getElementById('lista-comentarios');
-    if(dados.length === 0) {
-      div.innerHTML = '<p>Nenhum comentário ainda. Seja o primeiro! 🧱</p>';
-      return;
-    }
-    div.innerHTML = dados.map(c => 
-      `<div class="comentario">
-        <b>${c.nome}</b> <small>${new Date(c.data).toLocaleString('pt-BR')}</small>
-        <p>${c.texto}</p>
-      </div>`
-    ).join('');
-  }
+  if(id === 'comunidade') carregarComentarios();
+  if(id === 'videos') carregarVideos();
+}
 
-  // COMENTÁRIOS - ENVIAR
-  async function enviarComentario() {
-    const nome = document.getElementById('nome').value;
-    const texto = document.getElementById('texto').value;
-    if(!nome || !texto) return alert('Preencha nome e comentário!');
-    
-    await fetch('/api/comentar', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({nome, texto})
-    });
-    
-    document.getElementById('texto').value = '';
-    carregarComentarios();
+// YOUTUBE - PEGA DO BACKEND
+async function carregarVideos() {
+  try {
+    const res = await fetch('/api/videos');
+    const data = await res.json();
+    const grid = document.getElementById('grid-videos');
+    grid.innerHTML = data.items.map(video => `
+      <a href="https://youtube.com/watch?v=${video.id.videoId}" target="_blank" class="card-video">
+        <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
+        <h3>${video.snippet.title}</h3>
+      </a>
+    `).join('');
+  } catch {
+    document.getElementById('grid-videos').innerHTML = 'Erro ao carregar vídeos';
   }
+}
 
-  carregarVideos();
+// COMENTARIOS
+async function carregarComentarios() {
+  const res = await fetch('/api/comentarios');
+  const dados = await res.json();
+  const div = document.getElementById('lista-comentarios');
+  if(dados.length === 0) { div.innerHTML = '<p>Nenhum comentário ainda. Seja o primeiro! 🧱</p>'; return; }
+  div.innerHTML = dados.map(c =>
+    `<div class="comentario"><b>${c.nome}</b> <small>${new Date(c.data).toLocaleString('pt-BR')}</small><p>${c.texto}</p></div>`
+  ).join('');
+}
+
+async function enviarComentario() {
+  const nome = document.getElementById('nome').value;
+  const texto = document.getElementById('texto').value;
+  if(!nome ||!texto) return alert('Preencha nome e comentário!');
+  await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto})});
+  document.getElementById('texto').value = '';
+  carregarComentarios();
+}
+
+// GROQ IA - TAMBÉM PELO BACKEND
+async function perguntarIA() {
+  const pergunta = document.getElementById('pergunta').value;
+  if(!pergunta) return;
+  document.getElementById('resposta-groq').innerHTML = 'Pensando... 🧱';
+  const res = await fetch('/api/ia', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({pergunta})
+  });
+  const data = await res.json();
+  document.getElementById('resposta-groq').innerHTML = data.resposta;
+}
+
+carregarVideos();
 </script>
-
 </body>
-</html>
 </html>
