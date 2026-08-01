@@ -9,7 +9,7 @@
       --bg: #0A0E1A;
       --card: #111827;
       --border: #1F2937;
-      --primary: #6366F1; /* Roxo/Azul */
+      --primary: #6366F1;
       --primary-hover: #4F46E5;
       --text: #F9FAFB;
       --text-sec: #9CA3AF;
@@ -26,7 +26,7 @@
     header h1 { color: var(--primary); font-size: 2.5rem; }
     header p { color: var(--text-sec); }
 
-    nav { display: flex; justify-content: center; gap: 10px; background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); }
+    nav { display: flex; justify-content: center; gap: 10px; background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
     .tab-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -61,6 +61,12 @@
     .card-video img { width: 100%; }
     .card-video h3 { padding: 15px; font-size: 1rem; }
 
+    .grid-servidores { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card-servidor { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: 0.3s; }
+    .card-servidor:hover { border-color: var(--primary); transform: translateY(-5px); }
+    .status-online { color: #22C55E; font-weight: 700; }
+    .status-offline { color: #EF4444; font-weight: 700; }
+
     .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
     .card input, .card textarea {
       width: 100%; padding: 12px; margin: 8px 0; background: var(--bg);
@@ -71,7 +77,11 @@
       border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;
     }
     .card button:hover { background: var(--primary-hover); }
-    .comentario { background: var(--bg); padding: 10px; border-radius: 8px; margin: 8px 0; }
+    .comentario { background: var(--bg); padding: 15px; border-radius: 8px; margin: 12px 0; border: 1px solid var(--border); }
+    .post-img { width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; }
+    .post-gif { max-width: 300px; border-radius: 8px; margin-top: 10px; }
+    .gif-thumb { width: 100%; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
+    .gif-thumb.selecionado { border-color: var(--primary); }
     
     footer { text-align: center; padding: 30px; color: var(--text-sec); border-top: 1px solid var(--border); margin-top: 40px; }
   </style>
@@ -85,6 +95,7 @@
   <nav>
     <button class="tab-btn active" onclick="mostrarAba('videos', this)">Vídeos</button>
     <button class="tab-btn" onclick="mostrarAba('comunidade', this)">Comunidade</button>
+    <button class="tab-btn" onclick="mostrarAba('servidores', this)">SERVIDORES</button>
     <button class="tab-btn" onclick="mostrarAba('ia', this)">IA Tijolo</button>
   </nav>
 
@@ -97,12 +108,25 @@
     <div id="comunidade" class="conteudo-aba">
       <h2>Comunidade</h2>
       <div class="card">
-        <h3>Deixe seu comentário</h3>
+        <h3>Posta algo pra galera</h3>
         <input type="text" id="nome-comentario" placeholder="Seu nome">
         <textarea id="texto-comentario" placeholder="Sua mensagem..." rows="3"></textarea>
-        <button onclick="enviarComentario()">Enviar</button>
+        <input type="text" id="url-foto" placeholder="URL da foto opcional">
+        <div style="display:flex; gap:10px; margin:8px 0;">
+          <input type="text" id="busca-gif" placeholder="Buscar GIF no Giphy" style="flex:1;">
+          <button onclick="buscarGIF()">Buscar GIF</button>
+        </div>
+        <div id="resultados-gif" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:5px; max-height:200px; overflow-y:auto; margin-bottom:10px;"></div>
+        <input type="hidden" id="url-gif">
+        <button onclick="enviarComentario()">Enviar Post</button>
       </div>
       <div id="lista-comentarios"></div>
+    </div>
+
+    <div id="servidores" class="conteudo-aba">
+      <h2>🔥 Servidores Bedrock</h2>
+      <p>Jogue com a galera nos melhores servidores</p>
+      <div id="grid-servidores" class="grid-servidores">Carregando servidores...</div>
     </div>
 
     <div id="ia" class="conteudo-aba">
@@ -111,7 +135,7 @@
         <p>Me pergunta qualquer coisa de Minecraft!</p>
         <input type="text" id="pergunta-ia" placeholder="Ex: como fazer portal do nether?">
         <button onclick="perguntarIA()">Perguntar</button>
-        <div id="resposta-ia" style="margin-top: 15px; background: var(--bg); padding: 15px; border-radius: 8px;"></div>
+        <div id="resposta-ia" style="margin-top: 15px; background: var(--bg); padding: 15px; border-radius: 8px; min-height: 50px;"></div>
       </div>
     </div>
   </div>
@@ -148,16 +172,70 @@
     async function carregarComentarios() {
       const res = await fetch('/api/comentarios');
       const dados = await res.json();
-      document.getElementById('lista-comentarios').innerHTML = dados.map(c => `<div class="comentario"><b>${c.nome}</b>: ${c.texto}</div>`).join('');
+      document.getElementById('lista-comentarios').innerHTML = dados.map(c => `
+        <div class="comentario">
+          <b>${c.nome}</b>: ${c.texto}
+          ${c.foto ? `<img src="${c.foto}" class="post-img">` : ''}
+          ${c.gif ? `<img src="${c.gif}" class="post-gif">` : ''}
+        </div>
+      `).join('');
     }
 
     async function enviarComentario() {
       const nome = document.getElementById('nome-comentario').value;
       const texto = document.getElementById('texto-comentario').value;
-      if(!nome || !texto) return alert('Preenche tudo');
-      await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto})});
+      const foto = document.getElementById('url-foto').value;
+      const gif = document.getElementById('url-gif').value;
+      if(!nome || !texto) return alert('Preenche nome e texto');
+      
+      await fetch('/api/comentar', {
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify({nome, texto, foto, gif})
+      });
+      
       document.getElementById('texto-comentario').value = '';
+      document.getElementById('url-foto').value = '';
+      document.getElementById('url-gif').value = '';
+      document.getElementById('resultados-gif').innerHTML = '';
       carregarComentarios();
+    }
+
+    async function buscarGIF() {
+      const query = document.getElementById('busca-gif').value;
+      if(!query) return;
+      document.getElementById('resultados-gif').innerHTML = 'Buscando...';
+      const res = await fetch(`/api/gif?query=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      document.getElementById('resultados-gif').innerHTML = data.data.map(gif => `
+        <img src="${gif.images.fixed_height_small.url}" class="gif-thumb" 
+        onclick="selecionarGIF('${gif.images.downsized.url}', this)">
+      `).join('');
+    }
+
+    function selecionarGIF(url, el) {
+      document.querySelectorAll('.gif-thumb').forEach(i => i.classList.remove('selecionado'));
+      el.classList.add('selecionado');
+      document.getElementById('url-gif').value = url;
+    }
+
+    async function carregarServidores() {
+      try {
+        const res = await fetch('/api/servidores');
+        const data = await res.json();
+        document.getElementById('grid-servidores').innerHTML = data.servidores.map(s => `
+          <div class="card-servidor">
+            <h3>${s.nome}</h3>
+            <p><b>IP:</b> ${s.ip}:${s.porta}</p>
+            <p><b>Players:</b> ${s.online}/${s.max}</p>
+            <p><b>Status:</b> <span class="${s.online > 0 ? 'status-online' : 'status-offline'}">
+              ${s.online > 0 ? '🟢 Online' : '🔴 Offline'}
+            </span></p>
+          </div>
+        `).join('');
+      } catch(e) {
+        document.getElementById('grid-servidores').innerHTML = '<p>Erro ao carregar servidores</p>';
+      }
     }
 
     async function perguntarIA() {
@@ -170,6 +248,7 @@
 
     carregarVideos();
     carregarComentarios();
+    carregarServidores();
   </script>
 </body>
 </html>
