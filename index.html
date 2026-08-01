@@ -6,57 +6,27 @@
   <title>Tijolo Craft | Site Oficial</title>
   <style>
     :root {
-      --bg: #0A0E1A;
-      --card: #111827;
-      --border: #1F2937;
-      --primary: #6366F1;
-      --primary-hover: #4F46E5;
-      --text: #F9FAFB;
-      --text-sec: #9CA3AF;
+      --bg: #0A0E1A; --card: #111827; --border: #1F2937;
+      --primary: #6366F1; --primary-hover: #4F46E5;
+      --text: #F9FAFB; --text-sec: #9CA3AF;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.6; }
     
-    header { 
-      background: var(--card); 
-      padding: 20px; 
-      text-align: center; 
-      border-bottom: 2px solid var(--primary);
-    }
+    header { background: var(--card); padding: 20px; text-align: center; border-bottom: 2px solid var(--primary); }
     header h1 { color: var(--primary); font-size: 2.5rem; }
     header p { color: var(--text-sec); }
 
     nav { display: flex; justify-content: center; gap: 10px; background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-    .tab-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-sec);
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-    .tab-btn.active, .tab-btn:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
+    .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .tab-btn.active, .tab-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
     .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
     .conteudo-aba { display: none; }
     .conteudo-aba.active { display: block; }
 
     .grid-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .card-video {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      text-decoration: none;
-      color: var(--text);
-      transition: 0.3s;
-    }
+    .card-video { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: var(--text); transition: 0.3s; }
     .card-video:hover { transform: translateY(-5px); border-color: var(--primary); }
     .card-video img { width: 100%; }
     .card-video h3 { padding: 15px; font-size: 1rem; }
@@ -68,14 +38,8 @@
     .status-offline { color: #EF4444; font-weight: 700; }
 
     .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-    .card input, .card textarea {
-      width: 100%; padding: 12px; margin: 8px 0; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 8px; color: var(--text);
-    }
-    .card button {
-      background: var(--primary); color: white; border: none; padding: 12px 20px;
-      border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;
-    }
+    .card input, .card textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
+    .card button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
     .card button:hover { background: var(--primary-hover); }
     .comentario { background: var(--bg); padding: 15px; border-radius: 8px; margin: 12px 0; border: 1px solid var(--border); }
     .post-img { width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; }
@@ -125,7 +89,6 @@
 
     <div id="servidores" class="conteudo-aba">
       <h2>🔥 Servidores Bedrock</h2>
-      <p>Jogue com a galera nos melhores servidores</p>
       <div id="grid-servidores" class="grid-servidores">Carregando servidores...</div>
     </div>
 
@@ -140,9 +103,7 @@
     </div>
   </div>
 
-  <footer>
-    © 2026 Tijolo Craft. Feito com ódio e café.
-  </footer>
+  <footer>© 2026 Tijolo Craft. Feito com ódio e café.</footer>
 
   <script>
     const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w';
@@ -160,12 +121,12 @@
         const data = await res.json();
         document.getElementById('grid-videos').innerHTML = data.items.map(video => `
           <a href="https://youtube.com/watch?v=${video.id.videoId}" target="_blank" class="card-video">
-            <img src="${video.snippet.thumbnails.medium.url}" alt="${video.snippet.title}">
+            <img src="${video.snippet.thumbnails.medium.url}">
             <h3>${video.snippet.title}</h3>
           </a>
         `).join('');
       } catch(e) {
-        document.getElementById('grid-videos').innerHTML = '<p>Erro ao carregar vídeos. Checa a API Key no Cloudflare.</p>';
+        document.getElementById('grid-videos').innerHTML = '<p>Erro ao carregar vídeos</p>';
       }
     }
 
@@ -188,35 +149,48 @@
       const gif = document.getElementById('url-gif').value;
       if(!nome || !texto) return alert('Preenche nome e texto');
       
-      await fetch('/api/comentar', {
-        method: 'POST', 
-        headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify({nome, texto, foto, gif})
-      });
+      await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto, foto, gif})});
       
       document.getElementById('texto-comentario').value = '';
       document.getElementById('url-foto').value = '';
       document.getElementById('url-gif').value = '';
       document.getElementById('resultados-gif').innerHTML = '';
+      const preview = document.getElementById('preview-gif');
+      if(preview) preview.remove();
       carregarComentarios();
     }
 
     async function buscarGIF() {
       const query = document.getElementById('busca-gif').value;
       if(!query) return;
-      document.getElementById('resultados-gif').innerHTML = 'Buscando...';
-      const res = await fetch(`/api/gif?query=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      document.getElementById('resultados-gif').innerHTML = data.data.map(gif => `
-        <img src="${gif.images.fixed_height_small.url}" class="gif-thumb" 
-        onclick="selecionarGIF('${gif.images.downsized.url}', this)">
-      `).join('');
+      const resultadosDiv = document.getElementById('resultados-gif');
+      resultadosDiv.innerHTML = 'Buscando...';
+      try {
+        const res = await fetch(`/api/gif?query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        if(!data.data || data.data.length === 0) {
+          resultadosDiv.innerHTML = '<p>Nenhum GIF encontrado</p>'; return;
+        }
+        resultadosDiv.innerHTML = data.data.map(gif => `
+          <img src="${gif.images.fixed_height_small.url}" class="gif-thumb" onclick="selecionarGIF('${gif.images.downsized.url}', this)">
+        `).join('');
+      } catch(err) {
+        resultadosDiv.innerHTML = '<p>Erro ao buscar GIF</p>';
+      }
     }
 
     function selecionarGIF(url, el) {
       document.querySelectorAll('.gif-thumb').forEach(i => i.classList.remove('selecionado'));
       el.classList.add('selecionado');
       document.getElementById('url-gif').value = url;
+      let preview = document.getElementById('preview-gif');
+      if(!preview) {
+        preview = document.createElement('img');
+        preview.id = 'preview-gif';
+        preview.className = 'post-gif';
+        el.closest('.card').appendChild(preview);
+      }
+      preview.src = url;
     }
 
     async function carregarServidores() {
@@ -228,9 +202,7 @@
             <h3>${s.nome}</h3>
             <p><b>IP:</b> ${s.ip}:${s.porta}</p>
             <p><b>Players:</b> ${s.online}/${s.max}</p>
-            <p><b>Status:</b> <span class="${s.online > 0 ? 'status-online' : 'status-offline'}">
-              ${s.online > 0 ? '🟢 Online' : '🔴 Offline'}
-            </span></p>
+            <p><b>Status:</b> <span class="${s.online > 0 ? 'status-online' : 'status-offline'}">${s.online > 0 ? '🟢 Online' : '🔴 Offline'}</span></p>
           </div>
         `).join('');
       } catch(e) {
