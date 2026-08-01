@@ -9,41 +9,48 @@
       --bg: #0A0E1A; --card: #111827; --border: #1F2937;
       --primary: #6366F1; --primary-hover: #4F46E5;
       --text: #F9FAFB; --text-sec: #9CA3AF;
+      --radius: 16px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.6; }
-    header { background: var(--card); padding: 20px; text-align: center; border-bottom: 2px solid var(--primary); }
-    header h1 { color: var(--primary); font-size: 2.5rem; }
-    nav { display: flex; justify-content: center; gap: 10px; background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-    .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .tab-btn.active, .tab-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
-    .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-    .conteudo-aba { display: none; }
-    .conteudo-aba.active { display: block; }
-    .grid-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .card-video { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: var(--text); transition: 0.3s; }
-    .card-video:hover { transform: translateY(-5px); border-color: var(--primary); }
-    .card-video img { width: 100%; }
-    .card-video h3 { padding: 15px; font-size: 1rem; }
-    .grid-servidores { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .card-servidor { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: 0.3s; }
-    .card-servidor:hover { border-color: var(--primary); transform: translateY(-5px); }
-    .ip-box { display: flex; gap: 8px; margin: 8px 0; }
-    .ip-box input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 5px; }
-    .ip-box button { background: var(--primary); border: none; color: white; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-    .status-online { color: #22C55E; font-weight: 700; }
-    .status-offline { color: #EF4444; font-weight: 700; }
-    .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-    .card input, .card textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
-    .card button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .card button:hover { background: var(--primary-hover); }
-    .comentario { background: var(--bg); padding: 15px; border-radius: 8px; margin: 12px 0; border: 1px solid var(--border); }
-    .post-img, .post-gif { width: 100%; max-width: 400px; border-radius: 8px; margin-top: 10px; }
-    .gif-thumb { width: 100%; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
-    .gif-thumb.selecionado { border-color: var(--primary); }
-    .acoes { display: flex; gap: 15px; margin-top: 10px; font-size: 0.9rem; color: var(--text-sec); }
-    .acoes span { cursor: pointer; }
-    .acoes span:hover { color: var(--primary); }
+    header { background: linear-gradient(180deg, var(--card) 0%, #0A0E1A 100%); padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+    header h1 { color: var(--primary); font-size: 2.8rem; letter-spacing: -1px; }
+    header p { color: var(--text-sec); }
+    nav { display: flex; justify-content: center; gap: 10px; background: var(--card); padding: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; position: sticky; top: 0; z-index: 10; }
+  .tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sec); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+  .tab-btn.active,.tab-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+  .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+  .conteudo-aba { display: none; animation: fadeIn 0.3s; }
+  .conteudo-aba.active { display: block; }
+   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+   .grid-shorts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; } /* Shorts na vertical */
+
+   .card-video,.card-short { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: var(--text); transition: 0.3s; }
+   .card-video:hover,.card-short:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+   .card-video img,.card-short img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+   .card-short img { aspect-ratio: 9/16; } /* Thumb de shorts é vertical */
+   .card-video h3,.card-short h3 { padding: 15px; font-size: 1rem; }
+
+   .grid-servidores { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+   .card-servidor { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: 0.3s; }
+   .card-servidor:hover { border-color: var(--primary); transform: translateY(-5px); }
+   .ip-box { display: flex; gap: 8px; margin: 8px 0; }
+   .ip-box input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 5px; }
+   .ip-box button { background: var(--primary); border: none; color: white; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+   .ip-box button:hover { background: var(--primary-hover); }
+   .status-online { color: #22C55E; font-weight: 700; }
+   .status-offline { color: #EF4444; font-weight: 700; }
+   .card { background: var(--card); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 20px; }
+   .card input,.card textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
+   .card button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+   .card button:hover { background: var(--primary-hover); }
+   .comentario { background: var(--bg); padding: 15px; border-radius: 8px; margin: 12px 0; border: 1px solid var(--border); }
+   .post-img,.post-gif { width: 100%; max-width: 400px; border-radius: 8px; margin-top: 10px; }
+   .acoes { display: flex; gap: 15px; margin-top: 10px; font-size: 0.9rem; color: var(--text-sec); }
+   .acoes span { cursor: pointer; }
+   .acoes span:hover { color: var(--primary); }
     footer { text-align: center; padding: 30px; color: var(--text-sec); border-top: 1px solid var(--border); margin-top: 40px; }
   </style>
 </head>
@@ -55,6 +62,7 @@
 
   <nav>
     <button class="tab-btn active" onclick="mostrarAba('videos', this)">Vídeos</button>
+    <button class="tab-btn" onclick="mostrarAba('shorts', this)">SHORTS</button>
     <button class="tab-btn" onclick="mostrarAba('comunidade', this)">Comunidade</button>
     <button class="tab-btn" onclick="mostrarAba('servidores', this)">SERVIDORES</button>
     <button class="tab-btn" onclick="mostrarAba('downloads', this)">MODS/MAPAS</button>
@@ -64,7 +72,12 @@
   <div class="container">
     <div id="videos" class="conteudo-aba active">
       <h2>Últimos Vídeos</h2>
-      <div id="grid-videos" class="grid-videos">Carregando vídeos...</div>
+      <div id="grid-videos" class="grid">Carregando vídeos...</div>
+    </div>
+
+    <div id="shorts" class="conteudo-aba">
+      <h2>⚡ Shorts</h2>
+      <div id="grid-shorts" class="grid-shorts">Carregando shorts...</div>
     </div>
 
     <div id="comunidade" class="conteudo-aba">
@@ -74,12 +87,6 @@
         <input type="text" id="nome-comentario" placeholder="Seu nome">
         <textarea id="texto-comentario" placeholder="Sua mensagem..." rows="3"></textarea>
         <input type="file" id="upload-foto" accept="image/*">
-        <div style="display:flex; gap:10px; margin:8px 0;">
-          <input type="text" id="busca-gif" placeholder="Buscar GIF no Giphy" style="flex:1;">
-          <button onclick="buscarGIF()">Buscar GIF</button>
-        </div>
-        <div id="resultados-gif" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:5px; max-height:200px; overflow-y:auto; margin-bottom:10px;"></div>
-        <input type="hidden" id="url-gif">
         <button onclick="enviarComentario()">Enviar Post</button>
       </div>
       <div id="lista-comentarios"></div>
@@ -111,7 +118,7 @@
     </div>
   </div>
 
-  <footer>© 2026 Tijolo Craft. Feito com ódio e café.</footer>
+  <footer>© 2026 Tijolo Craft. Todos os direitos reservados.</footer>
 
   <script>
     const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w';
@@ -128,7 +135,7 @@
       alert('IP copiado: ' + ip);
     }
 
-    async function carregarVideos() { /* ...igual antes... */ 
+    async function carregarVideos() {
       try {
         const res = await fetch('/api/youtube');
         const data = await res.json();
@@ -141,14 +148,28 @@
       } catch(e) { document.getElementById('grid-videos').innerHTML = '<p>Erro ao carregar vídeos</p>'; }
     }
 
+    // NOVA FUNÇÃO PRA SHORTS
+    async function carregarShorts() {
+      try {
+        const res = await fetch(`/api/youtube?type=short`); // Pede só shorts pra sua API
+        const data = await res.json();
+        document.getElementById('grid-shorts').innerHTML = data.items.map(video => `
+          <a href="https://youtube.com/watch?v=${video.id.videoId}" target="_blank" class="card-short">
+            <img src="${video.snippet.thumbnails.medium.url}">
+            <h3>${video.snippet.title}</h3>
+          </a>
+        `).join('');
+      } catch(e) { document.getElementById('grid-shorts').innerHTML = '<p>Erro ao carregar shorts</p>'; }
+    }
+
     async function carregarComentarios() {
       const res = await fetch('/api/comentarios');
       const dados = await res.json();
       document.getElementById('lista-comentarios').innerHTML = dados.map(c => `
         <div class="comentario" id="c-${c.id}">
           <b>${c.nome}</b>: ${c.texto}
-          ${c.foto ? `<img src="${c.foto}" class="post-img">` : ''}
-          ${c.gif ? `<img src="${c.gif}" class="post-gif">` : ''}
+          ${c.foto? `<img src="${c.foto}" class="post-img">` : ''}
+          ${c.gif? `<img src="${c.gif}" class="post-gif">` : ''}
           <div class="acoes">
             <span onclick="curtir('${c.id}')">❤️ Curtir (${c.curtidas || 0})</span>
             <span onclick="responder('${c.id}')">💬 Responder</span>
@@ -160,26 +181,11 @@
     async function enviarComentario() {
       const nome = document.getElementById('nome-comentario').value;
       const texto = document.getElementById('texto-comentario').value;
-      const gif = document.getElementById('url-gif').value;
-      const arquivo = document.getElementById('upload-foto').files[0];
-      if(!nome || !texto) return alert('Preenche nome e texto');
-      
-      let fotoUrl = "";
-      if(arquivo) {
-        const form = new FormData();
-        form.append('file', arquivo);
-        const up = await fetch('/api/upload', {method: 'POST', body: form});
-        const upData = await up.json();
-        fotoUrl = upData.url;
-      }
-
-      await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto, foto: fotoUrl, gif})});
+      if(!nome ||!texto) return alert('Preenche nome e texto');
+      await fetch('/api/comentar', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nome, texto})});
       document.getElementById('texto-comentario').value = '';
       carregarComentarios();
     }
-
-    async function buscarGIF() { /* ...igual antes... */ }
-    function selecionarGIF(url, el) { /* ...igual antes... */ }
 
     async function carregarServidores() {
       const res = await fetch('/api/servidores');
@@ -193,7 +199,7 @@
             <button onclick="copiarIP('${s.ip}:${s.porta}')">Copiar</button>
           </div>
           <p><b>Players:</b> ${s.online}/${s.max}</p>
-          <p><b>Status:</b> <span class="${s.online >= 0 ? 'status-online' : 'status-offline'}">${s.online >= 0 ? '🟢 Online' : '🔴 Offline'}</span></p>
+          <p><b>Status:</b> <span class="${s.online >= 0? 'status-online' : 'status-offline'}">${s.online >= 0? '🟢 Online' : '🔴 Offline'}</span></p>
         </div>
       `).join('');
     }
@@ -204,7 +210,7 @@
     async function enviarArquivo() {
       const nome = document.getElementById('nome-arquivo').value;
       const arquivo = document.getElementById('arquivo-upload').files[0];
-      if(!nome || !arquivo) return alert('Preenche nome e seleciona arquivo');
+      if(!nome ||!arquivo) return alert('Preenche nome e seleciona arquivo');
       const form = new FormData();
       form.append('nome', nome);
       form.append('file', arquivo);
@@ -212,9 +218,11 @@
       alert('Arquivo enviado!');
     }
 
-    async function perguntarIA() { /* ...igual antes... */ }
+    async function perguntarIA() { /*...sua função de IA... */ }
 
+    // Carrega tudo ao iniciar
     carregarVideos();
+    carregarShorts(); // Carrega shorts junto
     carregarComentarios();
     carregarServidores();
   </script>
