@@ -1,32 +1,47 @@
 export async function onRequest(context) {
-  const YT_API_KEY = context.env.YT_API_KEY;
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const type = url.searchParams.get('type'); // 'short' ou null
+
   const CHANNEL_ID = 'UCtqAb6OTpfT-BRDgVp2aa3w';
-  const urlParams = new URL(context.request.url).searchParams;
-  const type = urlParams.get('type'); // pega ?type=short da URL
+  const YT_KEY = env.YOUTUBE_KEY; // você vai colocar no Cloudflare Pages > Settings > Variables
 
-  let maxResults = 6;
-  let query = '';
-  
-  // Se for shorts, busca mais e depois filtra
-  if (type === 'short') {
-    maxResults = 15; 
-    query = '#shorts'; // força buscar shorts
+  if (!YT_KEY) {
+    return new Response(JSON.stringify({ error: 'YOUTUBE_KEY não configurada' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
-  const url = `https://www.googleapis.com/youtube/v3/search?key=${YT_API_KEY}&channelId=${CHANNEL_ID}&q=${query}&part=snippet&order=date&maxResults=${maxResults}&type=video`;
-  const res = await fetch(url);
-  const data = await res.json();
+  try {
+    // Base da API
+    let apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${YT_KEY}&channelId=${CHANNEL_ID}&part=snippet&order=date&maxResults=12&type=video`;
 
-  // Se pediu shorts, filtra só os que tem #shorts no titulo
-  let items = data.items;
-  if (type === 'short') {
-    items = data.items.filter(v => 
-      v.snippet.title.toLowerCase().includes('#shorts') || 
-      v.snippet.description.toLowerCase().includes('#shorts')
-    ).slice(0, 6); // pega só 6
+    // Se for shorts, filtra por duração curta
+    if (type === 'short') {
+      apiUrl += '&videoDuration=short';
+    }
+
+    const res = await fetch(apiUrl);
+
+    if (!res.ok) {
+      throw new Error('Erro na API do YouTube: ' + res.status);
+    }
+
+    const data = await res.json();
+
+    // Retorna no mesmo formato que seu index.html já espera
+    return new Response(JSON.stringify(data), {
+      headers: { 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=300' // cache de 5 min pra não estourar cota
+      }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
-
-  return new Response(JSON.stringify({ items }), { 
-    headers: { 'Content-Type': 'application/json' } 
-  });
 }
