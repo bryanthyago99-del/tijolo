@@ -1,8 +1,17 @@
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const { id } = await request.json();
-  const comentario = await env.DB.get(`comentario:${id}`, 'json');
-  comentario.curtidas = (comentario.curtidas || 0) + 1;
-  await env.DB.put(`comentario:${id}`, JSON.stringify(comentario));
-  return new Response(JSON.stringify({ok: true}));
+  const DB = env.DB;
+  
+  try {
+    const { id } = await request.json();
+    
+    if (!id) {
+      return new Response(JSON.stringify({erro: "ID obrigatório"}), {status: 400});
+    }
+
+    await DB.prepare("UPDATE comentarios SET curtidas = curtidas + 1 WHERE id = ?").bind(id).run();
+    return new Response(JSON.stringify({sucesso: true}));
+  } catch(e) {
+    return new Response(JSON.stringify({erro: e.message}), {status: 500});
+  }
 }
