@@ -1,8 +1,7 @@
-export async function onRequest({env}) {
-  try {
-    const { results } = await env.DB.prepare("SELECT * FROM comentarios ORDER BY id DESC LIMIT 20").all();
-    return new Response(JSON.stringify(results), {headers: {'Content-Type': 'application/json'}});
-  } catch(e) {
-    return new Response(JSON.stringify({error: e.message}), {status: 500});
-  }
+export async function onRequest(context) {
+  const { env } = context;
+  const list = await env.DB.list({prefix: 'comentario:'});
+  const comentarios = await Promise.all(list.keys.map(k => env.DB.get(k.name, 'json')));
+  comentarios.reverse();
+  return new Response(JSON.stringify(comentarios), {headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
 }
